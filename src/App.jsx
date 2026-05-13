@@ -1,4 +1,55 @@
+import { useState, useEffect } from 'react';
+import SearchBar from './components/SearchBar';
+import CardGrid from './components/CardGrid';
+import { fetchCards } from './services/api';
+
 export default function App() {
+  const [allCards, setAllCards] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  // Paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const cardsPerPage = 10;
+
+  // Cargar cartas iniciales al montar el componente
+  useEffect(() => {
+    handleSearch('');
+  }, []);
+
+  const handleSearch = async (query) => {
+    setLoading(true);
+    setError(null);
+    setCurrentPage(1); // Resetear página al buscar
+    try {
+      const data = await fetchCards(query);
+      setAllCards(data);
+    } catch (err) {
+      setError(err.message);
+      setAllCards([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cálculo de paginación
+  const indexOfLastCard = currentPage * cardsPerPage;
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
+  const currentCards = allCards.slice(indexOfFirstCard, indexOfLastCard);
+  const totalPages = Math.ceil(allCards.length / cardsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prev => prev - 1);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans">
       {/* Header Minimalista con acento Magenta */}
@@ -17,22 +68,18 @@ export default function App() {
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-6">
         
         {/* Central Area: Buscador y Grilla de Cartas */}
-        <section className="flex-1 flex flex-col gap-6 order-2 lg:order-1">
-          {/* Placeholder Buscador */}
-          <div className="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-center min-h-[80px] shadow-sm">
-            <p className="text-slate-500 text-sm">Buscador y Filtros irán aquí...</p>
-          </div>
-
-          {/* Placeholder Grilla */}
-          <div className="bg-white border border-slate-200 rounded-xl flex-1 p-6 flex flex-col items-center justify-center min-h-[400px] shadow-sm">
-            <div className="w-16 h-16 mb-4 rounded-full bg-slate-50 flex items-center justify-center">
-              <svg className="w-8 h-8 text-fuchsia-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-              </svg>
-            </div>
-            <p className="text-slate-800 text-lg font-bold">Grilla de Cartas TCGdex</p>
-            <p className="text-slate-500 text-sm mt-2 text-center max-w-sm">Explora y selecciona cartas para agregar a tu mazo.</p>
-          </div>
+        <section className="flex-1 flex flex-col gap-6 order-2 lg:order-1 min-h-0">
+          <SearchBar onSearch={handleSearch} />
+          <CardGrid 
+            cards={currentCards} 
+            loading={loading} 
+            error={error} 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onNextPage={handleNextPage}
+            onPrevPage={handlePrevPage}
+            totalResults={allCards.length}
+          />
         </section>
 
         {/* Sidebar/Bottom Area: Mazo Activo */}
