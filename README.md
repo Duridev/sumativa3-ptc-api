@@ -1,16 +1,40 @@
-# React + Vite
+# Evaluación Sumativa 3 - SPA React (Pokémon Deck Builder) ⚡
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📝 Descripción del Proyecto
+**Pokémon Deck Builder** es una Single Page Application (SPA) desarrollada como proyecto académico. Su propósito principal es permitir a los usuarios buscar, explorar y armar mazos de cartas coleccionables de Pokémon. La aplicación implementa operaciones CRUD (Crear, Leer, Actualizar, Eliminar) gestionando el estado del mazo y asegurando su persistencia en el navegador.
 
-Currently, two official plugins are available:
+## 🛠️ Stack Tecnológico
+El proyecto fue construido utilizando herramientas modernas para garantizar escalabilidad, rendimiento y una excelente experiencia de usuario:
+* **Core:** React (Functional Components, Custom Hooks).
+* **Build Tool:** Vite (Para un entorno de desarrollo ultrarrápido y empaquetado optimizado).
+* **Estilos:** Tailwind CSS v4 (Enfoque Mobile-First, utilizando colores institucionales INACAP: Magenta y Amarillo).
+* **Persistencia de Datos:** `localStorage` (API del navegador para almacenar el mazo activo sin necesidad de backend).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 📡 API Utilizada
+Se seleccionó la API de **TCGdex** ([https://tcgdex.dev/es](https://tcgdex.dev/es)) por las siguientes razones:
+1. **Soporte multi-idioma:** Permite consultas y retornos de datos completamente en español, ideal para el público objetivo.
+2. **Estructura limpia:** Su endpoint `/v2/es/cards` ofrece objetos ligeros con identificadores únicos y rutas de imágenes predecibles, lo que agiliza el renderizado inicial en el frontend.
 
-## React Compiler
+## 🚀 Instalación y Ejecución
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Sigue estos pasos para levantar el entorno de desarrollo en tu máquina local:
 
-## Expanding the ESLint configuration
+1. **Clonar el repositorio:**
+   \`\`\`bash
+   git clone <URL_DEL_REPOSITORIO>
+   cd sumativa3-ptc-api
+   \`\`\`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+2. **Instalar dependencias:**
+   Se recomienda el uso de `pnpm` por su velocidad y eficiencia en el manejo de paquetes.
+   \`\`\`bash
+   pnpm install
+   \`\`\`
+
+3. **Ejecutar el servidor de desarrollo:**
+   \`\`\`bash
+   pnpm run dev
+   \`\`\`
+
+4. **Visualizar la aplicación:**
+   Abre tu navegador web y visita la URL proporcionada en la terminal (usualmente `http://localhost:5173`).
