@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import CardGrid from './components/CardGrid';
 import DeckSidebar from './components/DeckSidebar';
+import ToastContainer from './components/ToastContainer';
 import { fetchCards } from './services/api';
 import { useDeck } from './hooks/useDeck';
 
@@ -10,28 +11,44 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   
+  // Sistema de Notificaciones (Toasts)
+  const [toasts, setToasts] = useState([]);
+  const addToast = (message, type = 'info') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, 3500);
+  };
+  const removeToast = (id) => setToasts(prev => prev.filter(t => t.id !== id));
+
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 10;
 
-  // Hook del Mazo (Lógica de Negocio y LocalStorage)
-  const { deck, totalCards, addCard, updateQuantity, removeCard, clearDeck } = useDeck();
+  // Hook del Mazo (Lógica de Negocio y LocalStorage) con inyección de Toasts
+  const { deck, totalCards, addCard, updateQuantity, removeCard, clearDeck } = useDeck(addToast);
 
   // Cargar cartas iniciales al montar el componente
   useEffect(() => {
     handleSearch('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = async (query) => {
     setLoading(true);
     setError(null);
-    setCurrentPage(1); // Resetear página al buscar
+    setCurrentPage(1);
     try {
       const data = await fetchCards(query);
       setAllCards(data);
+      if (query && data.length === 0) {
+        addToast(`No se encontraron resultados para "${query}".`, 'warning');
+      }
     } catch (err) {
       setError(err.message);
       setAllCards([]);
+      addToast('Error al conectar con el servidor de TCGdex.', 'error');
     } finally {
       setLoading(false);
     }
@@ -44,19 +61,17 @@ export default function App() {
   const totalPages = Math.ceil(allCards.length / cardsPerPage);
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(prev => prev + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
-    }
+    if (currentPage > 1) setCurrentPage(prev => prev - 1);
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans">
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
+
       {/* Header Minimalista con acento Magenta */}
       <header className="sticky top-0 z-10 bg-white/90 backdrop-blur px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-200 shadow-sm shadow-slate-200">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -73,7 +88,8 @@ export default function App() {
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-6">
         
         {/* Central Area: Buscador y Grilla de Cartas */}
-        <section className="flex-1 flex flex-col gap-6 order-2 lg:order-1 min-h-0">
+        {/* En móvil aparece primero (arriba), en desktop a la izquierda */}
+        <section className="flex-1 flex flex-col gap-6 min-h-0 order-1">
           <SearchBar onSearch={handleSearch} />
           <CardGrid 
             cards={currentCards} 
@@ -89,7 +105,8 @@ export default function App() {
         </section>
 
         {/* Sidebar/Bottom Area: Mazo Activo */}
-        <aside className="w-full lg:w-80 xl:w-96 flex flex-col order-1 lg:order-2">
+        {/* En móvil aparece segundo (abajo), en desktop a la derecha */}
+        <aside className="w-full lg:w-80 xl:w-96 flex flex-col order-2">
           <DeckSidebar 
             deck={deck} 
             totalCards={totalCards} 

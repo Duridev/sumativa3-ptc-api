@@ -10,10 +10,30 @@ export default function CardGrid({
   addCard
 }) {
   if (loading) {
+    // Skeleton Screen para estado de carga
     return (
-      <div className="bg-white border border-slate-200 rounded-xl flex-1 p-6 flex flex-col items-center justify-center min-h-[400px] shadow-sm">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-fuchsia-600 mb-4"></div>
-        <p className="text-slate-500 font-medium animate-pulse">Cargando cartas...</p>
+      <div className="bg-slate-50/50 border border-slate-200 rounded-xl flex-1 flex flex-col shadow-sm overflow-hidden">
+        <div className="px-6 py-3 border-b border-slate-200 bg-white flex justify-between items-center animate-pulse">
+          <div className="h-5 bg-slate-200 rounded w-48"></div>
+          <div className="h-5 bg-slate-200 rounded w-24"></div>
+        </div>
+        <div className="flex-1 p-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm flex flex-col animate-pulse">
+                <div className="relative aspect-[63/88] w-full bg-slate-200 flex items-center justify-center">
+                  {/* Icono de carga simulado */}
+                  <svg className="w-10 h-10 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="p-3 border-t border-slate-100 flex-1 flex items-center justify-center">
+                  <div className="h-4 bg-slate-200 rounded w-3/4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -24,7 +44,7 @@ export default function CardGrid({
         <svg className="w-12 h-12 text-red-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
-        <p className="text-red-700 font-bold text-lg mb-2">Error</p>
+        <p className="text-red-700 font-bold text-lg mb-2">Ups, algo salió mal</p>
         <p className="text-red-600 text-center max-w-md">{error}</p>
       </div>
     );
@@ -33,13 +53,13 @@ export default function CardGrid({
   if (!cards || cards.length === 0) {
     return (
       <div className="bg-white border border-slate-200 rounded-xl flex-1 p-6 flex flex-col items-center justify-center min-h-[400px] shadow-sm">
-        <div className="w-16 h-16 mb-4 rounded-full bg-slate-50 flex items-center justify-center">
-          <svg className="w-8 h-8 text-fuchsia-500 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <div className="w-16 h-16 mb-4 rounded-full bg-yellow-50 flex items-center justify-center">
+          <svg className="w-8 h-8 text-yellow-500 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
         </div>
         <p className="text-slate-800 text-lg font-bold">No se encontraron cartas</p>
-        <p className="text-slate-500 text-sm mt-2 text-center max-w-sm">Intenta buscar con otro término.</p>
+        <p className="text-slate-500 text-sm mt-2 text-center max-w-sm">Revisa si escribiste bien el nombre o intenta con otro Pokémon.</p>
       </div>
     );
   }

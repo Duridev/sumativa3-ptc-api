@@ -3,9 +3,10 @@ import { useState } from 'react';
 export default function SearchBar({ onSearch }) {
   const [inputValue, setInputValue] = useState('');
 
-  // Función básica de sanitización para prevenir XSS simple
+  // Sanitización mejorada para prevenir XSS
   const sanitizeInput = (input) => {
-    return input.replace(/[<>]/g, '').trim();
+    // Elimina <, >, /, ', ", y &
+    return input.replace(/[<>/\\'\"&]/g, '').trim();
   };
 
   const handleSubmit = (e) => {
