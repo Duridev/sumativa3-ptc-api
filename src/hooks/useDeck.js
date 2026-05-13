@@ -24,7 +24,6 @@ export const useDeck = (addToast) => {
 
   // Write: Guardar en LocalStorage con Validación de Seguridad
   useEffect(() => {
-    // Sanitización y Validación: Solo guardar si es un array válido y los elementos tienen id
     if (Array.isArray(deck)) {
       const validDeck = deck.filter(card => card && card.id && typeof card.quantity === 'number' && card.quantity > 0);
       localStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(validDeck));
@@ -39,51 +38,48 @@ export const useDeck = (addToast) => {
       return;
     }
 
-    setDeck(prevDeck => {
-      const existingCardIndex = prevDeck.findIndex(c => c.id === card.id);
-      
-      if (existingCardIndex >= 0) {
-        const existingCard = prevDeck[existingCardIndex];
-        if (existingCard.quantity >= MAX_COPIES) {
-          addToast(`Ya tienes el máximo de ${MAX_COPIES} copias de ${card.name}.`, 'warning');
-          return prevDeck;
-        }
-        
-        const newDeck = [...prevDeck];
-        newDeck[existingCardIndex] = {
-          ...existingCard,
-          quantity: existingCard.quantity + 1
-        };
-        addToast(`Se añadió otra copia de ${card.name} al mazo.`, 'success');
-        return newDeck;
-      } else {
-        addToast(`Se añadió ${card.name} al mazo.`, 'success');
-        return [...prevDeck, { ...card, quantity: 1 }];
+    // Buscamos si la carta ya existe en el estado actual (para disparar el Toast 1 sola vez fuera del setter)
+    const existingCard = deck.find(c => c.id === card.id);
+
+    if (existingCard) {
+      if (existingCard.quantity >= MAX_COPIES) {
+        addToast(`Ya tienes el máximo de ${MAX_COPIES} copias de ${card.name}.`, 'warning');
+        return;
       }
-    });
+      addToast(`Se añadió otra copia de ${card.name} al mazo.`, 'success');
+      
+      setDeck(prevDeck => prevDeck.map(c => 
+        c.id === card.id ? { ...c, quantity: c.quantity + 1 } : c
+      ));
+    } else {
+      addToast(`Se añadió ${card.name} al mazo.`, 'success');
+      setDeck(prevDeck => [...prevDeck, { ...card, quantity: 1 }]);
+    }
   };
 
   const updateQuantity = (cardId, amount) => {
+    const cardToUpdate = deck.find(c => c.id === cardId);
+    if (!cardToUpdate) return;
+
+    const newQuantity = cardToUpdate.quantity + amount;
+
+    if (newQuantity > MAX_COPIES) {
+      addToast(`No puedes tener más de ${MAX_COPIES} copias.`, 'warning');
+      return;
+    }
+    
+    if (totalCards + amount > MAX_DECK_SIZE && amount > 0) {
+      addToast(`El mazo está lleno (${MAX_DECK_SIZE} cartas).`, 'warning');
+      return;
+    }
+
     setDeck(prevDeck => {
-      let cardName = '';
-      const updated = prevDeck.map(card => {
+      return prevDeck.map(card => {
         if (card.id === cardId) {
-          cardName = card.name;
-          const newQuantity = card.quantity + amount;
-          if (newQuantity > MAX_COPIES) {
-            addToast(`No puedes tener más de ${MAX_COPIES} copias.`, 'warning');
-            return card;
-          }
-          if (totalCards + amount > MAX_DECK_SIZE && amount > 0) {
-            addToast(`El mazo está lleno (${MAX_DECK_SIZE} cartas).`, 'warning');
-            return card;
-          }
           return { ...card, quantity: newQuantity };
         }
         return card;
       }).filter(card => card.quantity > 0);
-      
-      return updated;
     });
   };
 
