@@ -6,7 +6,8 @@ export default function CardGrid({
   totalPages, 
   onNextPage, 
   onPrevPage,
-  totalResults
+  totalResults,
+  addCard
 }) {
   if (loading) {
     return (
@@ -49,7 +50,7 @@ export default function CardGrid({
       {/* Header Info */}
       <div className="px-6 py-3 border-b border-slate-200 bg-white flex justify-between items-center">
         <p className="text-sm text-slate-500 font-medium">
-          Resultados: <span className="text-slate-800 font-bold">{totalResults}</span> cartas encontradas
+          Resultados: <span className="text-slate-800 font-bold">{totalResults}</span> cartas
         </p>
         <p className="text-sm text-slate-500 font-medium">
           Página <span className="text-fuchsia-600 font-bold">{currentPage}</span> de <span className="text-slate-800 font-bold">{totalPages}</span>
@@ -67,7 +68,7 @@ export default function CardGrid({
             return (
               <div 
                 key={card.id} 
-                className="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer group flex flex-col"
+                className="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all group flex flex-col relative"
               >
                 <div className="relative aspect-[63/88] w-full bg-slate-100 p-2 flex items-center justify-center">
                   <img 
@@ -79,9 +80,29 @@ export default function CardGrid({
                       e.target.src = 'https://via.placeholder.com/245x342.png?text=Error+Imagen';
                     }}
                   />
+                  
+                  {/* Overlay con botón Añadir al hacer hover */}
+                  <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <button 
+                      onClick={() => addCard(card)}
+                      className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold py-2 px-4 rounded-lg transform scale-95 group-hover:scale-100 transition-all shadow-lg flex items-center gap-1"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                      </svg>
+                      Añadir
+                    </button>
+                  </div>
                 </div>
-                <div className="p-3 text-center border-t border-slate-100 flex-1 flex items-center justify-center">
-                  <p className="text-slate-800 font-medium text-sm line-clamp-2">{card.name}</p>
+                <div className="p-2 text-center border-t border-slate-100 flex-1 flex flex-col items-center justify-center">
+                  <p className="text-slate-800 font-semibold text-xs line-clamp-2" title={card.name}>{card.name}</p>
+                  {/* Pequeño botón para móviles donde el hover no existe */}
+                  <button 
+                    onClick={() => addCard(card)}
+                    className="mt-2 w-full lg:hidden bg-slate-100 hover:bg-slate-200 text-fuchsia-600 text-xs font-bold py-1.5 rounded border border-slate-200 transition-colors"
+                  >
+                    + Añadir
+                  </button>
                 </div>
               </div>
             );
@@ -100,18 +121,11 @@ export default function CardGrid({
               : 'text-fuchsia-600 bg-fuchsia-50 hover:bg-fuchsia-100 border border-fuchsia-200'
           }`}
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
           </svg>
           Anterior
         </button>
-        
-        <div className="flex gap-1 hidden sm:flex">
-          {/* Opcional: Podrías renderizar números de página aquí si quisieras */}
-          <span className="px-3 py-1 bg-slate-100 rounded-md text-sm font-medium text-slate-600 border border-slate-200">
-            {currentPage} / {totalPages}
-          </span>
-        </div>
 
         <button
           onClick={onNextPage}
@@ -123,8 +137,8 @@ export default function CardGrid({
           }`}
         >
           Siguiente
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>
       </div>

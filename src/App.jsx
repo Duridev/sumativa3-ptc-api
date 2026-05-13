@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import CardGrid from './components/CardGrid';
+import DeckSidebar from './components/DeckSidebar';
 import { fetchCards } from './services/api';
+import { useDeck } from './hooks/useDeck';
 
 export default function App() {
   const [allCards, setAllCards] = useState([]);
@@ -11,6 +13,9 @@ export default function App() {
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 10;
+
+  // Hook del Mazo (Lógica de Negocio y LocalStorage)
+  const { deck, totalCards, addCard, updateQuantity, removeCard, clearDeck } = useDeck();
 
   // Cargar cartas iniciales al montar el componente
   useEffect(() => {
@@ -79,34 +84,19 @@ export default function App() {
             onNextPage={handleNextPage}
             onPrevPage={handlePrevPage}
             totalResults={allCards.length}
+            addCard={addCard}
           />
         </section>
 
         {/* Sidebar/Bottom Area: Mazo Activo */}
         <aside className="w-full lg:w-80 xl:w-96 flex flex-col order-1 lg:order-2">
-          {/* Sidebar pegajosa en desktop */}
-          <div className="sticky top-24 bg-white border border-slate-200 rounded-xl p-5 shadow-lg shadow-slate-200/50 flex flex-col min-h-[300px] lg:min-h-[calc(100vh-8rem)]">
-            <h2 className="text-lg font-bold text-slate-800 border-b border-slate-100 pb-3 mb-4 flex items-center justify-between">
-              <span>Mazo Activo</span>
-              <span className="bg-yellow-100 text-yellow-700 py-0.5 px-3 rounded-full text-xs font-bold border border-yellow-200">0 / 60</span>
-            </h2>
-            
-            {/* Lista del mazo (Placeholder) */}
-            <div className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-lg p-6 bg-slate-50/50">
-              <p className="text-slate-500 text-sm text-center font-medium">Tu mazo está vacío.</p>
-              <p className="text-slate-400 text-xs text-center mt-2">Haz clic en las cartas para agregarlas.</p>
-            </div>
-
-            {/* Acciones (Placeholder) */}
-            <div className="mt-4 pt-4 border-t border-slate-100 space-y-3">
-              <button className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors shadow-md shadow-fuchsia-600/20 opacity-50 cursor-not-allowed">
-                Guardar Mazo
-              </button>
-              <button className="w-full bg-white border-2 border-yellow-400 hover:bg-yellow-50 text-yellow-600 font-bold py-2 px-4 rounded-lg transition-colors shadow-sm">
-                Limpiar
-              </button>
-            </div>
-          </div>
+          <DeckSidebar 
+            deck={deck} 
+            totalCards={totalCards} 
+            updateQuantity={updateQuantity} 
+            removeCard={removeCard} 
+            clearDeck={clearDeck} 
+          />
         </aside>
 
       </main>
