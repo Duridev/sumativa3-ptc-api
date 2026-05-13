@@ -35,3 +35,7 @@ Las sugerencias y correcciones de la IA durante el desarrollo iterativo elevaron
 * **Reglas Estrictas del Mazo:** Al implementar el CRUD en `useDeck.js`, la IA aseguró que las reglas del negocio (máximo 60 cartas en total, máximo 4 copias por carta idéntica) se validen *antes* de modificar el estado. 
 * **Integridad del LocalStorage:** Para la Fase 4, la IA introdujo un filtro de seguridad en el `useEffect` encargado de guardar el mazo. Antes de ejecutar `localStorage.setItem`, verifica que el estado sea un arreglo y que cada carta tenga propiedades válidas (ID numérico/string, quantity positiva). Esto previene que una falla temporal corrompa la memoria del navegador del usuario.
 * **Corrección React Strict Mode:** La IA identificó que los Toasts se duplicaban debido al renderizado doble de React en desarrollo. Lo solucionó moviendo las llamadas de notificación fuera de los callbacks de los "Setters" del estado, demostrando un conocimiento profundo del ciclo de vida de React.
+
+### 5. Arquitectura React (Componentes, Props y Estado)
+* La IA sugirió una separación estricta de responsabilidades (*Separation of Concerns*). En lugar de tener un archivo monolítico, se abstrajo la lógica de estado global en el Custom Hook `useDeck.js`.
+* Se crearon componentes altamente reutilizables y de presentación pura (`<CardGrid />`, `<DeckSidebar />`, `<ToastContainer />`), donde el flujo de datos se comunica estrictamente mediante **Props** desde el componente padre (`App.jsx`). Esto hace que el código sea predecible, fácil de depurar y altamente escalable.
