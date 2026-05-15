@@ -1,4 +1,4 @@
-export default function DeckSidebar({ deck, totalCards, clearDeck, onCardClick }) {
+export default function DeckSidebar({ deck, totalCards, clearDeck, onCardClick, onSave }) {
   const isFull = totalCards === 60;
 
   return (
@@ -60,6 +60,7 @@ export default function DeckSidebar({ deck, totalCards, clearDeck, onCardClick }
       {/* Acciones */}
       <div className="pt-4 border-t border-slate-100 space-y-3 shrink-0">
         <button 
+          onClick={onSave}
           disabled={deck.length === 0}
           className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors shadow-md shadow-fuchsia-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >

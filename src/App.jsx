@@ -70,6 +70,10 @@ export default function App() {
     if (currentPage > 1) setCurrentPage(prev => prev - 1);
   };
 
+  const handleSaveDeck = () => {
+    addToast('Mazo guardado correctamente en tu navegador.', 'success');
+  };
+
   return (
     <div className="flex flex-col min-h-screen lg:h-screen lg:overflow-hidden bg-slate-50 text-slate-900 font-sans">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
@@ -117,6 +121,7 @@ export default function App() {
             removeCard={removeCard} 
             clearDeck={clearDeck}
             onCardClick={setSelectedCardId} 
+            onSave={handleSaveDeck}
           />
         </aside>
 

@@ -5,22 +5,21 @@ const MAX_DECK_SIZE = 60;
 const MAX_COPIES = 4;
 
 export const useDeck = (addToast) => {
-  const [deck, setDeck] = useState([]);
-
-  // Read: Leer del LocalStorage al montar
-  useEffect(() => {
-    const storedDeck = localStorage.getItem(DECK_STORAGE_KEY);
-    if (storedDeck) {
-      try {
+  const [deck, setDeck] = useState(() => {
+    // Read: Leer síncronamente del LocalStorage al inicializar el estado
+    try {
+      const storedDeck = localStorage.getItem(DECK_STORAGE_KEY);
+      if (storedDeck) {
         const parsed = JSON.parse(storedDeck);
         if (Array.isArray(parsed)) {
-          setDeck(parsed);
+          return parsed;
         }
-      } catch (error) {
-        console.error("Error parsing deck from local storage:", error);
       }
+    } catch (error) {
+      console.error("Error parsing deck from local storage:", error);
     }
-  }, []);
+    return [];
+  });
 
   // Write: Guardar en LocalStorage con Validación de Seguridad
   useEffect(() => {
