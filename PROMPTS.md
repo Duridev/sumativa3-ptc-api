@@ -31,7 +31,7 @@ Las sugerencias y correcciones de la IA durante el desarrollo iterativo elevaron
 
 ### 3. Manejo de Errores (Resiliencia)
 * **Robustez en la Red:** En el archivo `api.js`, la IA aplicó bloques `try/catch` estrictos. Además, incluyó una validación `if (!response.ok)` para lanzar excepciones personalizadas en caso de que el servidor de TCGdex responda con códigos 4xx o 5xx. En la UI, esto se refleja transformando el error en una "Caja Roja" amigable en lugar de una pantalla blanca rota.
-* **Fallbacks Visuales:** La IA añadió lógica en el componente `<CardGrid />` para interceptar errores de carga de imágenes (evento `onError`), sustituyéndolas por un placeholder, evitando que enlaces rotos en la base de datos de TCGdex arruinen la estética.
+* **Fallbacks Visuales y Prevención de Infinite Loops:** La IA añadió lógica en el componente `<CardGrid />` y `<DeckSidebar />` para interceptar errores de carga de imágenes (evento `onError`), sustituyéndolas por un placeholder. Posteriormente, se detectó un caso límite crítico (Edge Case) donde si el servidor del placeholder fallaba, se creaba un *infinite loop* de solicitudes que saturaba la red y bloqueaba la API. La IA lo solucionó instantáneamente anulando el listener de error (`e.target.onerror = null`) antes de la reasignación, salvaguardando el rendimiento de la aplicación.
 
 ### 4. Lógica de Negocio y Persistencia
 * **Reglas Estrictas del Mazo:** Al implementar el CRUD en `useDeck.js`, la IA aseguró que las reglas del negocio (máximo 60 cartas en total, máximo 4 copias por carta idéntica) se validen *antes* de modificar el estado. 

@@ -57,7 +57,7 @@ export default function CardModal({ cardId, onClose, deck, addCard, updateQuanti
             {/* Izquierda: Imagen */}
             <div className="w-full md:w-1/2 p-6 md:p-8 flex items-center justify-center bg-slate-50 border-r border-slate-100">
               <img 
-                src={details.image ? `${details.image}/high.png` : 'https://via.placeholder.com/350x500.png?text=Sin+Imagen'} 
+                src={details.image ? `${details.image}/high.png` : "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='350' height='500' style='background:%23f1f5f9'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%2394a3b8'%3EError Imagen%3C/text%3E%3C/svg%3E"} 
                 alt={details.name}
                 className="max-w-full h-auto object-contain drop-shadow-xl rounded-lg max-h-[60vh]"
               />

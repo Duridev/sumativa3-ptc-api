@@ -22,9 +22,10 @@ export default function DeckSidebar({ deck, totalCards, clearDeck, onCardClick, 
         ) : (
           <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-4 gap-2">
             {deck.map((card) => {
+              const fallback = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='245' height='342' style='background:%23f1f5f9'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%2394a3b8'%3EError Imagen%3C/text%3E%3C/svg%3E";
               const imageUrl = card.image 
                 ? `${card.image}/low.png` 
-                : 'https://via.placeholder.com/245x342.png?text=Sin+Imagen';
+                : fallback;
 
               return (
                 <div 
@@ -39,7 +40,10 @@ export default function DeckSidebar({ deck, totalCards, clearDeck, onCardClick, 
                     className="w-full h-auto object-contain rounded drop-shadow-sm border border-slate-200"
                     loading="lazy"
                     onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/245x342.png?text=Error';
+                      const fallback = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='245' height='342' style='background:%23f1f5f9'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%2394a3b8'%3EError Imagen%3C/text%3E%3C/svg%3E";
+                      if (e.target.src !== fallback) {
+                        e.target.src = fallback;
+                      }
                     }}
                   />
                   {/* Badge de Cantidad (si es > 1) */}

@@ -82,9 +82,10 @@ export default function CardGrid({
       <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {cards.map((card) => {
+            const fallback = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='245' height='342' style='background:%23f1f5f9'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%2394a3b8'%3EError Imagen%3C/text%3E%3C/svg%3E";
             const imageUrl = card.image 
               ? `${card.image}/low.png` 
-              : 'https://via.placeholder.com/245x342.png?text=Sin+Imagen';
+              : fallback;
 
             return (
               <div 
@@ -98,7 +99,10 @@ export default function CardGrid({
                     className="w-full h-full object-contain drop-shadow-sm group-hover:drop-shadow-md transition-all"
                     loading="lazy"
                     onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/245x342.png?text=Error+Imagen';
+                      const fallback = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='245' height='342' style='background:%23f1f5f9'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%2394a3b8'%3EError Imagen%3C/text%3E%3C/svg%3E";
+                      if (e.target.src !== fallback) {
+                        e.target.src = fallback;
+                      }
                     }}
                   />
                   
