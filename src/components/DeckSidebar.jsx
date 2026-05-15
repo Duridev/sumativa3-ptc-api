@@ -13,7 +13,7 @@ export default function DeckSidebar({ deck, totalCards, clearDeck, onCardClick }
       </h2>
       
       {/* Grilla de Cartas del Mazo (Scrollable) */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 mb-4">
+      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 pt-2 mb-4">
         {deck.length === 0 ? (
           <div className="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-lg p-6 bg-slate-50/50 h-full min-h-[200px]">
             <p className="text-slate-500 text-sm text-center font-medium">Tu mazo está vacío.</p>

@@ -7,7 +7,8 @@ export default function CardGrid({
   onNextPage, 
   onPrevPage,
   totalResults,
-  addCard
+  addCard,
+  onCardClick
 }) {
   if (loading) {
     // Skeleton Screen para estado de carga
@@ -101,13 +102,29 @@ export default function CardGrid({
                     }}
                   />
                   
-                  {/* Overlay con botón Añadir al hacer hover */}
-                  <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  {/* Overlay con botones Añadir y Ver al hacer hover */}
+                  <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 px-4">
                     <button 
-                      onClick={() => addCard(card)}
-                      className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold py-2 px-4 rounded-lg transform scale-95 group-hover:scale-100 transition-all shadow-lg flex items-center gap-1"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onCardClick(card.id);
+                      }}
+                      className="w-full cursor-pointer bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold py-2 px-4 rounded-lg transform scale-95 group-hover:scale-100 transition-all shadow-lg flex items-center justify-center gap-1 text-sm"
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      Ver
+                    </button>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addCard(card);
+                      }}
+                      className="w-full cursor-pointer bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold py-2 px-4 rounded-lg transform scale-95 group-hover:scale-100 transition-all shadow-lg flex items-center justify-center gap-1 text-sm"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
                       </svg>
                       Añadir
@@ -116,13 +133,27 @@ export default function CardGrid({
                 </div>
                 <div className="p-2 text-center border-t border-slate-100 flex-1 flex flex-col items-center justify-center">
                   <p className="text-slate-800 font-semibold text-xs line-clamp-2" title={card.name}>{card.name}</p>
-                  {/* Pequeño botón para móviles donde el hover no existe */}
-                  <button 
-                    onClick={() => addCard(card)}
-                    className="mt-2 w-full lg:hidden bg-slate-100 hover:bg-slate-200 text-fuchsia-600 text-xs font-bold py-1.5 rounded border border-slate-200 transition-colors"
-                  >
-                    + Añadir
-                  </button>
+                  {/* Botones para móviles donde el hover no existe */}
+                  <div className="mt-2 w-full lg:hidden flex gap-1.5">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onCardClick(card.id);
+                      }}
+                      className="flex-1 cursor-pointer bg-yellow-400 hover:bg-yellow-500 text-yellow-950 text-xs font-bold py-1.5 rounded transition-colors shadow-sm"
+                    >
+                      Ver
+                    </button>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addCard(card);
+                      }}
+                      className="flex-1 cursor-pointer bg-fuchsia-600 hover:bg-fuchsia-700 text-white text-xs font-bold py-1.5 rounded transition-colors shadow-sm"
+                    >
+                      + Añadir
+                    </button>
+                  </div>
                 </div>
               </div>
             );

@@ -103,6 +103,7 @@ export default function App() {
             onPrevPage={handlePrevPage}
             totalResults={allCards.length}
             addCard={addCard}
+            onCardClick={setSelectedCardId}
           />
         </section>
 
@@ -127,6 +128,7 @@ export default function App() {
           cardId={selectedCardId} 
           onClose={() => setSelectedCardId(null)} 
           deck={deck}
+          addCard={addCard}
           updateQuantity={updateQuantity}
           removeCard={removeCard}
         />

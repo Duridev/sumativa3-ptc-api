@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchCardDetails } from '../services/api';
 
-export default function CardModal({ cardId, onClose, deck, updateQuantity, removeCard }) {
+export default function CardModal({ cardId, onClose, deck, addCard, updateQuantity, removeCard }) {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -115,40 +115,52 @@ export default function CardModal({ cardId, onClose, deck, updateQuantity, remov
                 <p className="text-sm text-slate-500 font-medium mb-3 text-center">Gestión en tu Mazo Activo</p>
                 
                 {quantity === 0 ? (
-                  <p className="text-center text-slate-400 text-sm mb-4">Esta carta no está en tu mazo actualmente.</p>
-                ) : (
-                  <div className="flex items-center justify-center gap-4 mb-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-center text-slate-400 text-sm mb-2">Esta carta no está en tu mazo actualmente.</p>
                     <button 
-                      onClick={() => updateQuantity(cardId, -1)}
-                      className="w-10 h-10 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors font-bold text-lg"
+                      onClick={() => addCard(details)}
+                      className="w-full py-3 px-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold rounded-xl transition-colors shadow-md flex justify-center items-center gap-2"
                     >
-                      -
-                    </button>
-                    <div className="flex flex-col items-center">
-                      <span className="text-3xl font-black text-slate-800">{quantity}</span>
-                      <span className="text-xs text-slate-400 uppercase font-bold tracking-wider">Copias</span>
-                    </div>
-                    <button 
-                      onClick={() => updateQuantity(cardId, 1)}
-                      className="w-10 h-10 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors font-bold text-lg"
-                    >
-                      +
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                      </svg>
+                      Añadir al Mazo
                     </button>
                   </div>
-                )}
+                ) : (
+                  <>
+                    <div className="flex items-center justify-center gap-4 mb-4">
+                      <button 
+                        onClick={() => updateQuantity(cardId, -1)}
+                        className="w-10 h-10 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors font-bold text-lg"
+                      >
+                        -
+                      </button>
+                      <div className="flex flex-col items-center">
+                        <span className="text-3xl font-black text-slate-800">{quantity}</span>
+                        <span className="text-xs text-slate-400 uppercase font-bold tracking-wider">Copias</span>
+                      </div>
+                      <button 
+                        onClick={() => updateQuantity(cardId, 1)}
+                        className="w-10 h-10 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors font-bold text-lg"
+                      >
+                        +
+                      </button>
+                    </div>
 
-                <div className="flex gap-3">
-                  <button 
-                    onClick={() => {
-                      removeCard(cardId);
-                      onClose();
-                    }}
-                    disabled={quantity === 0}
-                    className="flex-1 py-3 px-4 bg-white border-2 border-red-200 hover:bg-red-50 text-red-600 font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Eliminar del Mazo
-                  </button>
-                </div>
+                    <div className="flex gap-3">
+                      <button 
+                        onClick={() => {
+                          removeCard(cardId);
+                          onClose();
+                        }}
+                        className="flex-1 py-3 px-4 bg-white border-2 border-red-200 hover:bg-red-50 text-red-600 font-bold rounded-xl transition-colors"
+                      >
+                        Eliminar del Mazo
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
 
             </div>
