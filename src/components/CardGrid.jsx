@@ -65,10 +65,10 @@ export default function CardGrid({
   }
 
   return (
-    <div className="bg-slate-50/50 border border-slate-200 rounded-xl flex-1 flex flex-col shadow-sm overflow-hidden">
+    <div className="bg-slate-50/50 border border-slate-200 rounded-xl flex-1 flex flex-col shadow-sm overflow-hidden min-h-0">
       
       {/* Header Info */}
-      <div className="px-6 py-3 border-b border-slate-200 bg-white flex justify-between items-center">
+      <div className="px-6 py-3 border-b border-slate-200 bg-white flex justify-between items-center shrink-0">
         <p className="text-sm text-slate-500 font-medium">
           Resultados: <span className="text-slate-800 font-bold">{totalResults}</span> cartas
         </p>
@@ -78,7 +78,7 @@ export default function CardGrid({
       </div>
 
       {/* Grid */}
-      <div className="flex-1 p-6 overflow-y-auto">
+      <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {cards.map((card) => {
             const imageUrl = card.image 

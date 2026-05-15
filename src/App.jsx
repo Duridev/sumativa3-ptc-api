@@ -71,11 +71,11 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans">
+    <div className="flex flex-col min-h-screen lg:h-screen lg:overflow-hidden bg-slate-50 text-slate-900 font-sans">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
       {/* Header Minimalista con acento Magenta */}
-      <header className="sticky top-0 z-10 bg-white/90 backdrop-blur px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-200 shadow-sm shadow-slate-200">
+      <header className="sticky top-0 z-10 bg-white/90 backdrop-blur px-4 py-4 sm:px-6 lg:px-8 border-b border-slate-200 shadow-sm shadow-slate-200 shrink-0">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <h1 className="text-xl sm:text-2xl font-bold text-fuchsia-600 flex items-center gap-2">
             <span className="text-yellow-500">⚡</span> Pokémon Deck Builder
@@ -87,7 +87,7 @@ export default function App() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-6">
+      <main className="flex-1 min-h-0 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-6">
         
         {/* Central Area: Buscador y Grilla de Cartas */}
         {/* En móvil aparece primero (arriba), en desktop a la izquierda */}
