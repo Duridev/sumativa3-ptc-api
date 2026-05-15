@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import CardGrid from './components/CardGrid';
 import DeckSidebar from './components/DeckSidebar';
+import CardModal from './components/CardModal';
 import ToastContainer from './components/ToastContainer';
 import { fetchCards } from './services/api';
 import { useDeck } from './hooks/useDeck';
@@ -10,6 +11,7 @@ export default function App() {
   const [allCards, setAllCards] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedCardId, setSelectedCardId] = useState(null);
   
   // Sistema de Notificaciones (Toasts)
   const [toasts, setToasts] = useState([]);
@@ -112,11 +114,23 @@ export default function App() {
             totalCards={totalCards} 
             updateQuantity={updateQuantity} 
             removeCard={removeCard} 
-            clearDeck={clearDeck} 
+            clearDeck={clearDeck}
+            onCardClick={setSelectedCardId} 
           />
         </aside>
 
       </main>
+
+      {/* Modal de Detalles de Carta */}
+      {selectedCardId && (
+        <CardModal 
+          cardId={selectedCardId} 
+          onClose={() => setSelectedCardId(null)} 
+          deck={deck}
+          updateQuantity={updateQuantity}
+          removeCard={removeCard}
+        />
+      )}
     </div>
   );
 }
